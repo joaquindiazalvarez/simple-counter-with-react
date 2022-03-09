@@ -10,3 +10,18 @@
     import 'relative/path/to/stylesheet.scss';
 
 */
+.caja{
+    background: black;
+    height: 500;
+    color: white;
+    display: flex;
+    font-size: 200px;
+}
+.caja div{
+    margin: 30px;
+    margin-left: 80px;
+    color: white;
+}
+i {
+    color:white;
+}
