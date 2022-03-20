@@ -4,23 +4,45 @@ import { Counter } from "./counter.jsx";
 //create your first component
 const Home = () => {
 	const [count, setCount] = useState(0);
-
+	const [hundredofthousand, set10e5] = useState(0);
+	const [tensofthousand, set10e4] = useState(0);
+	const [thousand, set10e3] = useState(0);
+	const [hundred, set10e2] = useState(0);
+	const [tens, set10e1] = useState(0);
+	const [seconds, set10e0] = useState(0);
+	const [countdown, setCountdown] = useState(false);
+	const [start, setOn] = useState(true);
+	const [alertTime, setAlert] = useState(-1);
+	const [timer, setTimer] = useState(0);
+	const [dummy, setDummy] = useState(0);
 	useEffect(() => {
-		const id = setInterval(
-			() => setCount((oldCount) => oldCount + 1),
-			1000
-		);
-
-		return () => {
-			clearInterval(id);
-		};
-	}, []);
-	let hundredofthousand = Math.round((count % 1000000) / 100000);
-	let tensofthousand = Math.round((count % 100000) / 10000);
-	let thousand = Math.round((count % 10000) / 1000);
-	let hundred = Math.round((count % 1000) / 100);
-	let tens = Math.round((count % 100) / 10);
-	let seconds = Math.round(count % 10);
+		if (countdown) {
+			setCount(timer);
+		}
+		const counter = setInterval(() => {
+			if (start) {
+				if (countdown && count >= 0) {
+					setCount(count - 1);
+				} else {
+					setCount(count + 1);
+				}
+				updateNumbers();
+				if (count == alertTime) {
+					alert("time was reached");
+				}
+				clearInterval(counter);
+			}
+			setDummy(dummy + 1);
+		}, 100);
+	}, [count, dummy]);
+	function updateNumbers() {
+		set10e5(Math.floor((count % 1000000) / 100000));
+		set10e4(Math.floor((count % 100000) / 10000));
+		set10e3(Math.floor((count % 10000) / 1000));
+		set10e2(Math.floor((count % 1000) / 100));
+		set10e1(Math.floor((count % 100) / 10));
+		set10e0(Math.floor(count % 10));
+	}
 	return (
 		<div>
 			<Counter
@@ -31,6 +53,63 @@ const Home = () => {
 				tensofthousand={tensofthousand}
 				hundredofthousand={hundredofthousand}
 			/>
+			<div className="text-center my-3">
+				<form>
+					<label>Countdown-seconds:</label>
+					<input
+						className="form-label mx-3"
+						type="number"
+						onChange={(e) => {
+							setTimer(e.target.value);
+						}}></input>
+					<button
+						type="button"
+						className="btn btn-dark"
+						onClick={() =>
+							countdown ? setCountdown(false) : setCountdown(true)
+						}>
+						{countdown ? "Normal Count" : "Countdown"}
+					</button>
+				</form>
+			</div>
+			<div className="row">
+				<div className="col text-center"></div>
+				<div className="col text-center">
+					<button
+						type="button"
+						className={
+							start ? "btn btn-success mx-3" : "btn btn-dark mx-3"
+						}
+						onClick={() => {
+							setOn(true);
+						}}>
+						Start
+					</button>
+					<button
+						type="button"
+						className={
+							start ? "btn btn-dark mx-3" : "btn btn-success mx-3"
+						}
+						onClick={() => {
+							setOn(false);
+						}}>
+						Stop
+					</button>
+					<button type="button" className="btn btn-dark mx-3">
+						Reset
+					</button>
+				</div>
+				<div className="col"></div>
+				<div className="text-center my-4">
+					<form>
+						<label>Alert at second:</label>
+						<input
+							className="form-label mx-3"
+							type="number"
+							onChange={(e) => setAlert(e.target.value)}></input>
+					</form>
+				</div>
+			</div>
 		</div>
 	);
 };
