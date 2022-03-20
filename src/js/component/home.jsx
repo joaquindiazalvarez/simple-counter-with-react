@@ -35,7 +35,7 @@ const Home = () => {
 			clearInterval(counter);
 			setDummy(dummy + 1);
 			console.log(count);
-		}, 100);
+		}, 1000);
 	}, [count, dummy]);
 	function updateNumbers() {
 		set10e5(Math.floor((count % 1000000) / 100000));
