@@ -16,23 +16,25 @@ const Home = () => {
 	const [timer, setTimer] = useState(0);
 	const [dummy, setDummy] = useState(0);
 	useEffect(() => {
-		if (countdown) {
-			setCount(timer);
-		}
 		const counter = setInterval(() => {
 			if (start) {
-				if (countdown && count >= 0) {
+				if (countdown) {
 					setCount(count - 1);
+					if (count <= 2) {
+						setOn(false);
+						console.log;
+					}
 				} else {
 					setCount(count + 1);
 				}
-				updateNumbers();
 				if (count == alertTime) {
 					alert("time was reached");
 				}
-				clearInterval(counter);
 			}
+			updateNumbers();
+			clearInterval(counter);
 			setDummy(dummy + 1);
+			console.log(count);
 		}, 100);
 	}, [count, dummy]);
 	function updateNumbers() {
@@ -66,11 +68,16 @@ const Home = () => {
 						type="button"
 						className="btn btn-dark"
 						onClick={() =>
-							countdown ? setCountdown(false) : setCountdown(true)
+							countdown
+								? setCountdown(false)
+								: (setCountdown(true), setCount(timer))
 						}>
 						{countdown ? "Normal Count" : "Countdown"}
 					</button>
 				</form>
+			</div>
+			<div className="text-center text-warning">
+				<p>To contdown or reset, counter must be stopped</p>
 			</div>
 			<div className="row">
 				<div className="col text-center"></div>
@@ -95,7 +102,12 @@ const Home = () => {
 						}}>
 						Stop
 					</button>
-					<button type="button" className="btn btn-dark mx-3">
+					<button
+						type="button"
+						className="btn btn-dark mx-3"
+						onClick={() => {
+							setCount(0);
+						}}>
 						Reset
 					</button>
 				</div>
